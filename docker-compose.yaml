@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+    container_name: frontend
+    env_file:
+      - .env
+      
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`aws-quiz.emraaysolutions.com`) && !PathPrefix(`/api`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+      - "traefik.http.routers.frontend.priority=1"
+   # Optional HTTP → HTTPS redirect
+      - "traefik.http.routers.frontend-http.rule=Host(`aws-quiz.emraaysolutions.com`)"
+      - "traefik.http.routers.frontend-http.entrypoints=web"
+      - "traefik.http.routers.frontend-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+    restart: unless-stopped
+     
+    networks:
+      - my_app_net
+      - traefik_proxy
+
+
+networks:
+  my_app_net:
+    external: true
+  traefik_proxy:
+    external: true
+
+volumes:
+  mongo_data:
