@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is the frontend application for the Emraay AWS project, built with Next.js 15, React 19, TypeScript, and Tailwind CSS. It provides a modern web interface for users, integrated with Firebase for authentication and connecting to the backend API.
+This is the AWSQ-frontend application for the Emraay AWS project, built with Next.js 15, React 19, TypeScript, and Tailwind CSS. It provides a modern web interface for users, integrated with Firebase for authentication and connecting to the backend API.
 
 ## Prerequisites
 
